@@ -1,0 +1,28 @@
+{
+    "author": "Jeswin Kumar <jeswinpk@agilehead.com>",
+    "name": "isotropy-plugin-react",
+    "version": "0.0.1",
+    "description": "Static file handling module for Isotropy.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jeswin/isotropy-plugin-react.git"
+    },
+    "main": "dist/isotropy-plugin-react",
+    "license": "MIT",
+    "dependencies": {
+        "isotropy-router": "*"
+    },
+    "devDependencies": {
+        "koa": "2.0.0-alpha.3",
+        "nodefunc-promisify": "*",
+        "babel-polyfill": "*",
+        "babel-preset-es2015": "*",
+        "babel-preset-react": "*",
+        "babel-preset-stage-2": "*",
+        "babel-plugin-transform-class-properties": "*",
+        "mocha": "*",
+        "should": "*"
+    },
+    "keywords": ["static files", "server"],
+    "license" : "MIT"
+}
