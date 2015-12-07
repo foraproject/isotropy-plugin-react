@@ -30,7 +30,7 @@ type ReactConfigType = {}
 
 const getDefaultValues = function(val: Object = {}) : ReactAppType {
     return  {
-        type: val.type || "ui_react",
+        type: val.type || "react",
         module: val.module,
         path: val.path || "/",
         renderToStaticMarkup: (typeof(val.renderToStaticMarkup) !== "undefined" && val.renderToStaticMarkup !== null) ? val.renderToStaticMarkup : false
