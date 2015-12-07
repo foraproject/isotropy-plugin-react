@@ -17,7 +17,7 @@ type ModuleType = {
     routes: Array<ReactAppRouteType>
 }
 
-type ReactAppType = {
+export type ReactAppType = {
     module: ModuleType,
     type: string,
     path: string,
@@ -25,7 +25,7 @@ type ReactAppType = {
 };
 
 
-type ReactConfigType = {}
+export type ReactConfigType = {}
 
 
 const getDefaultValues = function(val: Object = {}) : ReactAppType {
