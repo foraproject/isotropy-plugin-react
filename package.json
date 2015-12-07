@@ -1,8 +1,8 @@
 {
     "author": "Jeswin Kumar <jeswinpk@agilehead.com>",
     "name": "isotropy-plugin-react",
-    "version": "0.0.1",
-    "description": "Static file handling module for Isotropy.",
+    "version": "0.1.0",
+    "description": "React plugin for Isotropy.",
     "repository": {
         "type": "git",
         "url": "https://github.com/jeswin/isotropy-plugin-react.git"
@@ -10,7 +10,9 @@
     "main": "dist/isotropy-plugin-react",
     "license": "MIT",
     "dependencies": {
-        "isotropy-router": "*"
+        "isotropy-router": "*",
+        "react": "*",
+        "isotropy-adapter-react": "*"
     },
     "devDependencies": {
         "koa": "2.0.0-alpha.3",

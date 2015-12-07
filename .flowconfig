@@ -10,3 +10,4 @@ interfaces/
 .*/scripts/.*
 .*/node_modules/babel-.*/.*
 .*/node_modules/babylon/.*
+.*/node_modules/fbjs/.*
