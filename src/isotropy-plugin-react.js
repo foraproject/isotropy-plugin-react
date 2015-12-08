@@ -21,7 +21,8 @@ export type ReactAppType = {
     module: ModuleType,
     type: string,
     path: string,
-    renderToStaticMarkup: boolean
+    renderToStaticMarkup: boolean,
+    template?: (html: string) => string
 };
 
 
@@ -55,7 +56,14 @@ const setup = async function(appConfig: ReactAppType, server: KoaAppType, config
                 url: route.url,
                 handler: (context, props) => {
                     const component = React.createElement(route.component, Object.assign({}, props));
-                    reactAdapter.render(context, component, { renderToStaticMarkup: appConfig.renderToStaticMarkup, template: x => x });
+                    reactAdapter.render(
+                        context,
+                        component,
+                        {
+                            renderToStaticMarkup: appConfig.renderToStaticMarkup,
+                            template: appConfig.template || (x => x)
+                        }
+                    );
                 },
                 options: { argumentsAsObject: true }
             };
