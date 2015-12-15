@@ -1,8 +1,11 @@
 {
     "author": "Jeswin Kumar <jeswinpk@agilehead.com>",
     "name": "isotropy-plugin-react",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "React plugin for Isotropy.",
+    "scripts": {
+        "test": "mocha dist/test/test.js"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/jeswin/isotropy-plugin-react.git"
@@ -10,8 +13,8 @@
     "main": "dist/isotropy-plugin-react",
     "license": "MIT",
     "dependencies": {
-        "isotropy-router": "*",
         "react": "*",
+        "isotropy-router": "*",
         "isotropy-adapter-react": "*"
     },
     "devDependencies": {
