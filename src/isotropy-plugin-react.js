@@ -109,7 +109,7 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactAppType) :
         method: route.method,
         url: route.url,
         handler: async (context: KoaContextType, args: Object) => {
-            reactAdapter.renderRelayContainer(
+            await reactAdapter.renderRelayContainer(
                 {
                     relayContainer: route.relayContainer,
                     relayRoute: route.relayRoute,
@@ -142,7 +142,6 @@ const setup = async function(appConfig: ReactAppType, server: KoaType, config: R
             throw new Error("Unknown type. Route type must be handler, react or relay.");
         }
     });
-
     router.add(routes);
 
     server.use(async (ctx, next) => {
