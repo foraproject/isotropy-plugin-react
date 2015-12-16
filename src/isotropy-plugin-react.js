@@ -41,22 +41,25 @@ type ModuleType = {
     routes: Array<AppRouteType>
 }
 
-export type ReactAppType = {
+export type ReactPluginConfigType = {
     module: ModuleType,
     type: string,
     path: string,
-    renderToStaticMarkup: boolean,
-    template?: (html: string) => string
+    renderToStaticMarkup?: boolean,
+    toHtml: (html: string, props?: Object) => string,
+    elementSelector: string
 };
 
 export type ReactConfigType = {}
 
-const getDefaultValues = function(val: Object = {}) : ReactAppType {
+const getDefaultValues = function(val: Object = {}) : ReactPluginConfigType {
     return  {
         type: val.type || "react",
         module: val.module,
         path: val.path || "/",
-        renderToStaticMarkup: (typeof(val.renderToStaticMarkup) !== "undefined" && val.renderToStaticMarkup !== null) ? val.renderToStaticMarkup : false
+        renderToStaticMarkup: (typeof(val.renderToStaticMarkup) !== "undefined" && val.renderToStaticMarkup !== null) ? val.renderToStaticMarkup : false,
+        toHtml: val.toHtml,
+        elementSelector: val.elementSelector
     };
 };
 
@@ -72,7 +75,7 @@ const getAppRoute = function(route: Object) : AppRouteType {
     }
 };
 
-const getHandlerRoute = function(route: HandlerRouteType, appConfig: ReactAppType) : HttpMethodRouteArgsType {
+const getHandlerRoute = function(route: HandlerRouteType, appConfig: ReactPluginConfigType) : HttpMethodRouteArgsType {
     return {
         type: "pattern",
         method: route.method,
@@ -81,7 +84,7 @@ const getHandlerRoute = function(route: HandlerRouteType, appConfig: ReactAppTyp
     };
 };
 
-const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactAppType) : HttpMethodRouteArgsType {
+const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactPluginConfigType) : HttpMethodRouteArgsType {
     return {
         type: "pattern",
         method: route.method,
@@ -94,7 +97,8 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactA
                     context,
                     options: {
                         renderToStaticMarkup: appConfig.renderToStaticMarkup,
-                        template: appConfig.template || (x => x)
+                        toHtml: appConfig.toHtml,
+                        elementSelector: "#isotropy-container"
                     }
                 }
             );
@@ -103,7 +107,7 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactA
     };
 };
 
-const getRelayRoute = function(route: RelayRouteType, appConfig: ReactAppType) : HttpMethodRouteArgsType {
+const getRelayRoute = function(route: RelayRouteType, appConfig: ReactPluginConfigType) : HttpMethodRouteArgsType {
     return {
         type: "pattern",
         method: route.method,
@@ -118,7 +122,8 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactAppType) :
                     context,
                     options: {
                         renderToStaticMarkup: appConfig.renderToStaticMarkup,
-                        template: appConfig.template || ((x, props) => x)
+                        toHtml: appConfig.toHtml,
+                        elementSelector: "#isotropy-container"
                     }
                 }
             );
@@ -127,7 +132,7 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactAppType) :
     };
 }
 
-const setup = async function(appConfig: ReactAppType, server: KoaType, config: ReactConfigType) : Promise {
+const setup = async function(appConfig: ReactPluginConfigType, server: KoaType, config: ReactConfigType) : Promise {
     const router = new Router();
 
     const routes = appConfig.module.routes.map(_route => {

@@ -1,7 +1,7 @@
 {
     "author": "Jeswin Kumar <jeswinpk@agilehead.com>",
     "name": "isotropy-plugin-react",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "React plugin for Isotropy.",
     "scripts": {
         "update-schema": "node ./dist/scripts/updateSchema.js",
