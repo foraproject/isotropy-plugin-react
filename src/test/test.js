@@ -46,7 +46,7 @@ describe("Isotropy React Plugin", () => {
 
     it(`Should get default configuration values`, () => {
         const config = {};
-        const completedConfig = reactModule.getDefaultValues(config);
+        const completedConfig = reactModule.getDefaults(config);
         completedConfig.type.should.equal("react");
         completedConfig.path.should.equal("/");
     });
@@ -95,7 +95,7 @@ describe("Isotropy React Plugin", () => {
 
 
     it(`Should serve a relay+react app with static markup`, () => {
-        const moduleConfig = {  
+        const moduleConfig = {
             routes: [
                 { url: "/hellorelay/:id", method: "GET", relayContainer: MyRelayComponent, relayRoute: MyRelayRoute, graphqlUrl: "http://localhost:8081/graphql" }
             ]

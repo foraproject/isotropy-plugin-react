@@ -52,7 +52,7 @@ export type ReactPluginConfigType = {
 
 export type ReactConfigType = {}
 
-const getDefaultValues = function(val: Object = {}) : ReactPluginConfigType {
+const getDefaults = function(val: Object = {}) : ReactPluginConfigType {
     return  {
         type: val.type || "react",
         module: val.module,
@@ -156,6 +156,6 @@ const setup = async function(appConfig: ReactPluginConfigType, server: KoaType, 
 
 
 export default {
-    getDefaultValues,
+    getDefaults,
     setup
 };
