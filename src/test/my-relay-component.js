@@ -3,16 +3,16 @@ import Relay from 'react-relay';
 import MyComponent from "./my-component";
 
 const relayComponent = Relay.createContainer(
-    MyComponent,
-    {
-        fragments: {
-            ship: () => Relay.QL`
-                fragment on Ship {
-                    name
-                }
-            `,
-        }
+  MyComponent,
+  {
+    fragments: {
+      ship: () => Relay.QL`
+      fragment on Ship {
+        name
+      }
+      `,
     }
+  }
 );
 
 export default relayComponent;

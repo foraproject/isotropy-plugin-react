@@ -1,44 +1,44 @@
 {
-    "author": "Jeswin Kumar <jeswinpk@agilehead.com>",
-    "name": "isotropy-plugin-react",
-    "version": "1.0.1",
-    "description": "React plugin for Isotropy.",
-    "scripts": {
-        "update-schema": "node ./dist/scripts/updateSchema.js",
-        "test": "mocha dist/test/test.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jeswin/isotropy-plugin-react.git"
-    },
-    "main": "dist/isotropy-plugin-react",
-    "license": "MIT",
-    "dependencies": {
-        "react": "*",
-        "isotropy-router": "*",
-        "isotropy-adapter-react": "*"
-    },
-    "devDependencies": {
-        "koa": "2.0.0-alpha.3",
-        "express": "*",
-        "express-graphql": "*",
-        "graphql": "*",
-        "graphql-relay": "*",
-        "nodefunc-promisify": "*",
-        "babel-polyfill": "*",
-        "babel-preset-es2015": "*",
-        "babel-preset-react": "*",
-        "babel-preset-stage-2": "*",
-        "babel-plugin-transform-class-properties": "*",
-        "babel-relay-plugin-loader": "*",
-        "mocha": "*",
-        "should": "*"
-    },
-    "metadata": {
-        "graphql": {
-            "schema": "./dist/test/my-schema.json"
-        }
-    },
-    "keywords": ["static files", "server"],
-    "license" : "MIT"
+  "author": "Jeswin Kumar <jeswinpk@agilehead.com>",
+  "name": "isotropy-plugin-react",
+  "version": "1.0.2",
+  "description": "React plugin for Isotropy.",
+  "scripts": {
+    "update-schema": "node ./dist/scripts/updateSchema.js",
+    "test": "mocha dist/test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeswin/isotropy-plugin-react.git"
+  },
+  "main": "dist/isotropy-plugin-react",
+  "license": "MIT",
+  "dependencies": {
+    "react": "*",
+    "isotropy-router": "*",
+    "isotropy-adapter-react": "*"
+  },
+  "devDependencies": {
+    "koa": "2.0.0-alpha.3",
+    "express": "*",
+    "express-graphql": "*",
+    "graphql": "*",
+    "graphql-relay": "*",
+    "nodefunc-promisify": "*",
+    "babel-polyfill": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-react": "*",
+    "babel-preset-stage-2": "*",
+    "babel-plugin-transform-class-properties": "*",
+    "babel-relay-plugin-loader": "*",
+    "mocha": "*",
+    "should": "*"
+  },
+  "metadata": {
+    "graphql": {
+      "schema": "./dist/test/my-schema.json"
+    }
+  },
+  "keywords": ["static files", "server"],
+  "license" : "MIT"
 }
