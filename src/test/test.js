@@ -1,8 +1,9 @@
 import __polyfill from "babel-polyfill";
 import should from 'should';
 import http from "http";
-import koa from "koa";
+import Router from "isotropy-router";
 import querystring from "querystring";
+import promisify from "nodefunc-promisify";
 import reactModule from "../isotropy-plugin-react";
 import schema from "./my-schema";
 import MyComponent from "./my-component";
@@ -15,32 +16,40 @@ import graphQLHTTP from 'express-graphql';
 
 describe("Isotropy React Plugin", () => {
 
-  let defaultInstance: KoaAppType;
+  const makeRequest = (host, port, path, method, headers, _postData) => {
+    return new Promise((resolve, reject) => {
+      const postData = (typeof _postData === "string") ? _postData : querystring.stringify(_postData);
+      const options = { host, port, path, method, headers };
 
-  const makeRequest = (host, port, path, method, headers, _postData, cb, onErrorCb) => {
-    const postData = (typeof _postData === "string") ? _postData : querystring.stringify(_postData);
-    const options = { host, port, path, method, headers };
-
-    let result = "";
-    const req = http.request(options, function(res) {
-      res.setEncoding('utf8');
-      res.on('data', function(data) { result += data; });
-      res.on('end', function() { cb(result); });
+      let result = "";
+      const req = http.request(options, function(res) {
+        res.setEncoding('utf8');
+        res.on('data', function(data) { result += data; });
+        res.on('end', function() { resolve({ result, res }); });
+      });
+      req.on('error', function(e) { reject(e); });
+      req.write(postData);
+      req.end();
     });
-    req.on('error', function(e) { onErrorCb(e); });
-    req.write(postData);
-    req.end();
   };
 
+  let server, router;
 
-  before(function() {
-    defaultInstance = new koa();
-    defaultInstance.listen(8080);
+  before(async () => {
+    server = http.createServer((req, res) => router.doRouting(req, res));
+    const listen = promisify(server.listen.bind(server));
+    await listen(0);
 
-    const app = express();
     // Expose a GraphQL endpoint
+    await listen(0)
+    const app = express();
+    const expressListen = promisify(app.listen.bind(app));
     app.use('/graphql', graphQLHTTP({schema, pretty: true}));
-    app.listen(8081);
+    await expressListen(8081);
+  });
+
+  beforeEach(() => {
+    router = new Router();
   });
 
 
@@ -52,7 +61,7 @@ describe("Isotropy React Plugin", () => {
   });
 
 
-  it(`Should serve a react app`, () => {
+  it(`Should serve a react app`, async () => {
     const moduleConfig = {
       routes: [
         { url: "/hello", method: "GET", component: MyComponent }
@@ -61,19 +70,13 @@ describe("Isotropy React Plugin", () => {
     const appConfig = { module: moduleConfig, path: "/", renderToStaticMarkup: false };
     const isotropyConfig = { dir: __dirname };
 
-    const promise = new Promise((resolve, reject) => {
-      reactModule.setup(appConfig, defaultInstance, isotropyConfig).then(() => {
-        makeRequest("localhost", 8080, "/hello", "GET", { 'Content-Type': 'application/x-www-form-urlencoded' }, {}, resolve, reject);
-      }, reject);
-    });
-
-    return promise.then((data) => {
-      data.should.startWith("<html data-reactid");
-    });
+    await reactModule.setup(appConfig, router, isotropyConfig);
+    const data = await makeRequest("localhost", server.address().port, "/hello", "GET", { 'Content-Type': 'application/x-www-form-urlencoded' }, {});
+    data.result.should.startWith("<html data-reactid");
   });
 
 
-  it(`Should serve a react app with static markup`, () => {
+  it(`Should serve a react app with static markup`, async () => {
     const moduleConfig = {
       routes: [
         { url: "/hello/:name", method: "GET", component: MyComponent }
@@ -82,19 +85,13 @@ describe("Isotropy React Plugin", () => {
     const appConfig = { module: moduleConfig, path: "/", renderToStaticMarkup: true };
     const isotropyConfig = { dir: __dirname };
 
-    const promise = new Promise((resolve, reject) => {
-      reactModule.setup(appConfig, defaultInstance, isotropyConfig).then(() => {
-        makeRequest("localhost", 8080, "/hello/mister", "GET", { 'Content-Type': 'application/x-www-form-urlencoded' }, {}, resolve, reject);
-      }, reject);
-    });
-
-    return promise.then((data) => {
-      data.should.equal("<html><body>Hello mister</body></html>");
-    });
+    await reactModule.setup(appConfig, router, isotropyConfig);
+    const data = await makeRequest("localhost", server.address().port, "/hello/mister", "GET", { 'Content-Type': 'application/x-www-form-urlencoded' }, {});
+    data.result.should.equal("<html><body>Hello mister</body></html>");
   });
 
 
-  it(`Should serve a relay+react app with static markup`, () => {
+  it(`Should serve a relay+react app with static markup`, async () => {
     const moduleConfig = {
       routes: [
         { url: "/hellorelay/:id", method: "GET", relayContainer: MyRelayComponent, relayRoute: MyRelayRoute, graphqlUrl: "http://localhost:8081/graphql" }
@@ -103,14 +100,8 @@ describe("Isotropy React Plugin", () => {
     const appConfig = { module: moduleConfig, path: "/", renderToStaticMarkup: true };
     const isotropyConfig = { dir: __dirname };
 
-    const promise = new Promise((resolve, reject) => {
-      reactModule.setup(appConfig, defaultInstance, isotropyConfig).then(() => {
-        makeRequest("localhost", 8080, "/hellorelay/265", "GET", { 'Content-Type': 'application/x-www-form-urlencoded' }, {}, resolve, reject);
-      }, reject);
-    });
-
-    return promise.then((data) => {
-      data.should.equal("<html><body>Hello ENTERPRISE(265)</body></html>");
-    });
+    await reactModule.setup(appConfig, router, isotropyConfig);
+    const data = await makeRequest("localhost", server.address().port, "/hellorelay/265", "GET", { 'Content-Type': 'application/x-www-form-urlencoded' }, {});
+    data.result.should.equal("<html><body>Hello ENTERPRISE(265)</body></html>");
   });
 });

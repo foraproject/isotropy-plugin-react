@@ -1,16 +1,16 @@
 /* @flow */
-
-import type { KoaType, KoaContextType, KoaHandlerType } from "./flow/koa-types";
-import type { HttpMethodRouteOptionsType, HttpMethodRouteArgsType } from "isotropy-router";
-import Router from "isotropy-router";
 import reactAdapter from "isotropy-adapter-react";
+import Router from "isotropy-router";
+
+import type { HttpMethodRouteOptionsType, HttpMethodRouteArgsType } from "isotropy-router";
+import type { IncomingMessage, ServerResponse } from "./flow/http";
 
 
 type HandlerRouteType = {
   type: "handler",
   url: string,
   method: string,
-  handler: KoaHandlerType
+  handler: (...args: Array<any>) => Promise;
 }
 
 type ReactComponentRouteType = {
@@ -19,7 +19,6 @@ type ReactComponentRouteType = {
   method: string,
   component: Function,
   args: Object,
-  context: KoaContextType,
   options: HttpMethodRouteOptionsType
 }
 
@@ -31,7 +30,6 @@ type RelayRouteType = {
   relayRoute: Object,
   graphqlUrl: string,
   args: Object,
-  context: KoaContextType,
   options: HttpMethodRouteOptionsType
 }
 
@@ -89,12 +87,12 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactP
     type: "pattern",
     method: route.method,
     url: route.url,
-    handler: async (context: KoaContextType, args: Object) => {
-      reactAdapter.render(
-        {
+    handler: async (req: IncomingMessage, res: ServerResponse, args: Object) => {
+      reactAdapter.render({
           component: route.component,
+          req,
+          res,
           args,
-          context,
           options: {
             renderToStaticMarkup: appConfig.renderToStaticMarkup,
             toHtml: appConfig.toHtml,
@@ -112,14 +110,14 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactPluginConf
     type: "pattern",
     method: route.method,
     url: route.url,
-    handler: async (context: KoaContextType, args: Object) => {
-      await reactAdapter.renderRelayContainer(
-        {
+    handler: async (req: IncomingMessage, res: ServerResponse, args: Object) => {
+      await reactAdapter.renderRelayContainer({
           relayContainer: route.relayContainer,
           relayRoute: route.relayRoute,
           graphqlUrl: route.graphqlUrl,
+          req,
+          res,
           args,
-          context,
           options: {
             renderToStaticMarkup: appConfig.renderToStaticMarkup,
             toHtml: appConfig.toHtml,
@@ -132,9 +130,7 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactPluginConf
   };
 }
 
-const setup = async function(appConfig: ReactPluginConfigType, server: KoaType, config: ReactConfigType) : Promise {
-  const router = new Router();
-
+const setup = async function(appConfig: ReactPluginConfigType, router: Router, config: ReactConfigType) : Promise {
   const routes = appConfig.module.routes.map(_route => {
     const route = getAppRoute(_route);
     if (route.type === "handler") {
@@ -148,10 +144,6 @@ const setup = async function(appConfig: ReactPluginConfigType, server: KoaType, 
     }
   });
   router.add(routes);
-
-  server.use(async (ctx, next) => {
-    await router.doRouting(ctx, next)
-  });
 };
 
 
