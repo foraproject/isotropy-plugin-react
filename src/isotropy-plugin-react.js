@@ -57,7 +57,7 @@ const getDefaults = function(val: Object = {}) : ReactPluginConfigType {
     path: val.path || "/",
     renderToStaticMarkup: (typeof(val.renderToStaticMarkup) !== "undefined" && val.renderToStaticMarkup !== null) ? val.renderToStaticMarkup : false,
     toHtml: val.toHtml,
-    elementSelector: val.elementSelector
+    elementSelector: val.elementSelector || "#isotropy-container"
   };
 };
 
