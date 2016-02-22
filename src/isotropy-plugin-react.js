@@ -96,7 +96,7 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactP
           options: {
             renderToStaticMarkup: appConfig.renderToStaticMarkup,
             toHtml: appConfig.toHtml,
-            elementSelector: "#isotropy-container"
+            elementSelector: appConfig.elementSelector
           }
         }
       );
@@ -121,7 +121,7 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactPluginConf
           options: {
             renderToStaticMarkup: appConfig.renderToStaticMarkup,
             toHtml: appConfig.toHtml,
-            elementSelector: "#isotropy-container"
+            elementSelector: appConfig.elementSelector
           }
         }
       );
