@@ -54,7 +54,7 @@ describe("Isotropy React Plugin", () => {
 
 
   it(`Should get default configuration values`, () => {
-    const config = {};
+    const config = { type: "react" };
     const completedConfig = reactModule.getDefaults(config);
     completedConfig.type.should.equal("react");
     completedConfig.path.should.equal("/");

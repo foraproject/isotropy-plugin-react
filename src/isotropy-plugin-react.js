@@ -48,13 +48,17 @@ export type ReactConfigType = {
 };
 
 export type getDefaultsParamsType = {
+  type: string,
   routes: Array<AppRouteType>,
-  toHtml?: (html: string, props?: Object) => string
+  toHtml?: (html: string, props?: Object) => string,
+  path?: string,
+  renderToStaticMarkup?: boolean,
+  elementSelector?: string
 }
 
-const getDefaults = function(val: getDefaultsParamsType = { routes: [] }) : ReactPluginConfigType {
+const getDefaults = function(val: getDefaultsParamsType) : ReactPluginConfigType {
   return  {
-    type: val.type || "react",
+    type: val.type,
     routes: val.routes,
     path: val.path || "/",
     renderToStaticMarkup: (typeof(val.renderToStaticMarkup) !== "undefined" && val.renderToStaticMarkup !== null) ? val.renderToStaticMarkup : false,
