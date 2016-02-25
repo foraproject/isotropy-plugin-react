@@ -62,12 +62,10 @@ describe("Isotropy React Plugin", () => {
 
 
   it(`Should serve a react app`, async () => {
-    const moduleConfig = {
-      routes: [
-        { url: "/hello", method: "GET", component: MyComponent }
-      ]
-    }
-    const appConfig = { module: moduleConfig, path: "/", renderToStaticMarkup: false };
+    const routes = [
+      { url: "/hello", method: "GET", component: MyComponent }
+    ];
+    const appConfig = { routes, path: "/", renderToStaticMarkup: false };
     const isotropyConfig = { dir: __dirname };
 
     await reactModule.setup(appConfig, router, isotropyConfig);
@@ -77,12 +75,10 @@ describe("Isotropy React Plugin", () => {
 
 
   it(`Should serve a react app with static markup`, async () => {
-    const moduleConfig = {
-      routes: [
-        { url: "/hello/:name", method: "GET", component: MyComponent }
-      ]
-    }
-    const appConfig = { module: moduleConfig, path: "/", renderToStaticMarkup: true };
+    const routes = [
+      { url: "/hello/:name", method: "GET", component: MyComponent }
+    ];
+    const appConfig = { routes, path: "/", renderToStaticMarkup: true };
     const isotropyConfig = { dir: __dirname };
 
     await reactModule.setup(appConfig, router, isotropyConfig);
@@ -92,12 +88,10 @@ describe("Isotropy React Plugin", () => {
 
 
   it(`Should serve a relay+react app with static markup`, async () => {
-    const moduleConfig = {
-      routes: [
-        { url: "/hellorelay/:id", method: "GET", relayContainer: MyRelayComponent, relayRoute: MyRelayRoute, graphqlUrl: "http://localhost:8081/graphql" }
-      ]
-    }
-    const appConfig = { module: moduleConfig, path: "/", renderToStaticMarkup: true };
+    const routes = [
+      { url: "/hellorelay/:id", method: "GET", relayContainer: MyRelayComponent, relayRoute: MyRelayRoute, graphqlUrl: "http://localhost:8081/graphql" }
+    ];
+    const appConfig = { routes, path: "/", renderToStaticMarkup: true };
     const isotropyConfig = { dir: __dirname };
 
     await reactModule.setup(appConfig, router, isotropyConfig);

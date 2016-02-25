@@ -35,12 +35,8 @@ type RelayRouteType = {
 
 type AppRouteType = ReactComponentRouteType | HandlerRouteType | RelayRouteType;
 
-type ModuleType = {
-  routes: Array<AppRouteType>
-}
-
 export type ReactPluginConfigType = {
-  module: ModuleType,
+  routes: Array<AppRouteType>,
   type: string,
   path: string,
   renderToStaticMarkup?: boolean,
@@ -48,15 +44,21 @@ export type ReactPluginConfigType = {
   elementSelector: string
 };
 
-export type ReactConfigType = {}
+export type ReactConfigType = {
+};
 
-const getDefaults = function(val: Object = {}) : ReactPluginConfigType {
+export type getDefaultsParamsType = {
+  routes: Array<AppRouteType>,
+  toHtml?: (html: string, props?: Object) => string
+}
+
+const getDefaults = function(val: getDefaultsParamsType = { routes: [] }) : ReactPluginConfigType {
   return  {
     type: val.type || "react",
-    module: val.module,
+    routes: val.routes,
     path: val.path || "/",
     renderToStaticMarkup: (typeof(val.renderToStaticMarkup) !== "undefined" && val.renderToStaticMarkup !== null) ? val.renderToStaticMarkup : false,
-    toHtml: val.toHtml,
+    toHtml: val.toHtml || ((html) => html),
     elementSelector: val.elementSelector || "#isotropy-container"
   };
 };
@@ -131,7 +133,7 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactPluginConf
 }
 
 const setup = async function(appConfig: ReactPluginConfigType, router: Router, config: ReactConfigType) : Promise {
-  const routes = appConfig.module.routes.map(_route => {
+  const routes = appConfig.routes.map(_route => {
     const route = getAppRoute(_route);
     if (route.type === "handler") {
       return getHandlerRoute(route, appConfig);
