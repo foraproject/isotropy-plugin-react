@@ -105,7 +105,7 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactP
     method: route.method,
     url: route.url,
     handler: async (req: IncomingMessage, res: ServerResponse, args: Object) => {
-      reactAdapter.render({
+      await reactAdapter.render({
           component: route.component,
           req,
           res,
