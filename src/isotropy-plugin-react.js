@@ -19,7 +19,11 @@ type ReactComponentRouteType = {
   method: string,
   component: Function,
   args: Object,
-  options: HttpMethodRouteOptionsType
+  options: HttpMethodRouteOptionsType,
+  renderToStaticMarkup?: boolean,
+  toHtml?: (html: string, props?: Object) => string,
+  elementSelector?: string,
+  onRender?: Function
 }
 
 type RelayRouteType = {
@@ -30,7 +34,11 @@ type RelayRouteType = {
   relayRoute: Object,
   graphqlUrl: string,
   args: Object,
-  options: HttpMethodRouteOptionsType
+  options: HttpMethodRouteOptionsType,
+  renderToStaticMarkup?: boolean,
+  toHtml?: (html: string, props?: Object) => string,
+  elementSelector?: string,
+  onRender?: Function
 }
 
 type AppRouteType = ReactComponentRouteType | HandlerRouteType | RelayRouteType;
@@ -41,7 +49,8 @@ export type ReactPluginConfigType = {
   path: string,
   renderToStaticMarkup?: boolean,
   toHtml: (html: string, props?: Object) => string,
-  elementSelector: string
+  elementSelector: string,
+  onRender?: Function
 };
 
 export type ReactConfigType = {
@@ -50,10 +59,11 @@ export type ReactConfigType = {
 export type getDefaultsParamsType = {
   type: string,
   routes: Array<AppRouteType>,
-  toHtml?: (html: string, props?: Object) => string,
   path?: string,
   renderToStaticMarkup?: boolean,
-  elementSelector?: string
+  toHtml?: (html: string, props?: Object) => string,
+  elementSelector?: string,
+  onRender?: Function
 }
 
 const getDefaults = function(val: getDefaultsParamsType) : ReactPluginConfigType {
@@ -63,7 +73,8 @@ const getDefaults = function(val: getDefaultsParamsType) : ReactPluginConfigType
     path: val.path || "/",
     renderToStaticMarkup: (typeof(val.renderToStaticMarkup) !== "undefined" && val.renderToStaticMarkup !== null) ? val.renderToStaticMarkup : false,
     toHtml: val.toHtml || ((html) => html),
-    elementSelector: val.elementSelector || "#isotropy-container"
+    elementSelector: val.elementSelector || "#isotropy-container",
+    onRender: val.onRender
   };
 };
 
@@ -100,9 +111,10 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactP
           res,
           args,
           options: {
-            renderToStaticMarkup: appConfig.renderToStaticMarkup,
-            toHtml: appConfig.toHtml,
-            elementSelector: appConfig.elementSelector
+            renderToStaticMarkup: route.renderToStaticMarkup || appConfig.renderToStaticMarkup,
+            toHtml: route.toHtml || appConfig.toHtml,
+            elementSelector: route.elementSelector || appConfig.elementSelector,
+            onRender: route.onRender || appConfig.onRender
           }
         }
       );
@@ -125,9 +137,10 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactPluginConf
           res,
           args,
           options: {
-            renderToStaticMarkup: appConfig.renderToStaticMarkup,
-            toHtml: appConfig.toHtml,
-            elementSelector: appConfig.elementSelector
+            renderToStaticMarkup: route.renderToStaticMarkup || appConfig.renderToStaticMarkup,
+            toHtml: route.toHtml || appConfig.toHtml,
+            elementSelector: route.elementSelector || appConfig.elementSelector,
+            onRender: route.onRender || appConfig.onRender
           }
         }
       );
