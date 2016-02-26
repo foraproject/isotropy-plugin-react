@@ -110,12 +110,10 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactP
           req,
           res,
           args,
-          options: {
-            renderToStaticMarkup: route.renderToStaticMarkup || appConfig.renderToStaticMarkup,
-            toHtml: route.toHtml || appConfig.toHtml,
-            elementSelector: route.elementSelector || appConfig.elementSelector,
-            onRender: route.onRender || appConfig.onRender
-          }
+          renderToStaticMarkup: route.renderToStaticMarkup || appConfig.renderToStaticMarkup,
+          toHtml: route.toHtml || appConfig.toHtml,
+          elementSelector: route.elementSelector || appConfig.elementSelector,
+          onRender: route.onRender || appConfig.onRender
         }
       );
     },
@@ -136,12 +134,10 @@ const getRelayRoute = function(route: RelayRouteType, appConfig: ReactPluginConf
           req,
           res,
           args,
-          options: {
-            renderToStaticMarkup: route.renderToStaticMarkup || appConfig.renderToStaticMarkup,
-            toHtml: route.toHtml || appConfig.toHtml,
-            elementSelector: route.elementSelector || appConfig.elementSelector,
-            onRender: route.onRender || appConfig.onRender
-          }
+          renderToStaticMarkup: route.renderToStaticMarkup || appConfig.renderToStaticMarkup,
+          toHtml: route.toHtml || appConfig.toHtml,
+          elementSelector: route.elementSelector || appConfig.elementSelector,
+          onRender: route.onRender || appConfig.onRender
         }
       );
     },
