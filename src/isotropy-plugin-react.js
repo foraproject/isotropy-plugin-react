@@ -35,7 +35,8 @@ export type ReactPluginConfigType = {
   renderToStaticMarkup?: boolean,
   toHtml: (html: string, props?: Object) => string,
   elementSelector: string,
-  onRender?: Function
+  onRender?: Function,
+  onError?: (req: IncomingMessage, res: ServerResponse, e: any) => void
 };
 
 export type ReactConfigType = {
@@ -48,7 +49,8 @@ export type getDefaultsParamsType = {
   renderToStaticMarkup?: boolean,
   toHtml?: (html: string, props?: Object) => string,
   elementSelector?: string,
-  onRender?: Function
+  onRender?: Function,
+  onError?: (req: IncomingMessage, res: ServerResponse, e: any) => void
 }
 
 const getDefaults = function(val: getDefaultsParamsType) : ReactPluginConfigType {
@@ -59,7 +61,8 @@ const getDefaults = function(val: getDefaultsParamsType) : ReactPluginConfigType
     renderToStaticMarkup: (typeof(val.renderToStaticMarkup) !== "undefined" && val.renderToStaticMarkup !== null) ? val.renderToStaticMarkup : false,
     toHtml: val.toHtml || ((html) => html),
     elementSelector: val.elementSelector || "#isotropy-container",
-    onRender: val.onRender
+    onRender: val.onRender,
+    onError: val.onError
   };
 };
 
