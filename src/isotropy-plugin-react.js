@@ -26,22 +26,7 @@ type ReactComponentRouteType = {
   onRender?: Function
 }
 
-type RelayRouteType = {
-  type: "relay",
-  url: string,
-  method: string,
-  relayContainer: Function,
-  relayRoute: Object,
-  graphqlUrl: string,
-  args: Object,
-  options: HttpMethodRouteOptionsType,
-  renderToStaticMarkup?: boolean,
-  toHtml?: (html: string, props?: Object) => string,
-  elementSelector?: string,
-  onRender?: Function
-}
-
-type AppRouteType = ReactComponentRouteType | HandlerRouteType | RelayRouteType;
+type AppRouteType = ReactComponentRouteType | HandlerRouteType;
 
 export type ReactPluginConfigType = {
   routes: Array<AppRouteType>,
@@ -83,10 +68,8 @@ const getAppRoute = function(route: Object) : AppRouteType {
     return Object.assign({}, route, { type: "handler" });
   } else if (typeof route.component !== "undefined" && route.component !== null) {
     return Object.assign({}, route, { type: "react" });
-  } else if (typeof route.relayContainer !== "undefined" && route.relayContainer !== null) {
-    return Object.assign({}, route, { type: "relay" });
   } else {
-    throw new Error("Unknown type. Route type must be handler, react or relay.");
+    throw new Error("Unknown type. Route type must be handler or react.");
   }
 };
 
@@ -121,29 +104,6 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactP
   };
 };
 
-const getRelayRoute = function(route: RelayRouteType, appConfig: ReactPluginConfigType) : HttpMethodRouteArgsType {
-  return {
-    type: "pattern",
-    method: route.method,
-    url: route.url,
-    handler: async (req: IncomingMessage, res: ServerResponse, args: Object) => {
-      await reactAdapter.renderRelayContainer({
-          relayContainer: route.relayContainer,
-          relayRoute: route.relayRoute,
-          graphqlUrl: route.graphqlUrl,
-          req,
-          res,
-          args,
-          renderToStaticMarkup: route.renderToStaticMarkup || appConfig.renderToStaticMarkup,
-          toHtml: route.toHtml || appConfig.toHtml,
-          elementSelector: route.elementSelector || appConfig.elementSelector,
-          onRender: route.onRender || appConfig.onRender
-        }
-      );
-    },
-    options: { argumentsAsObject: true }
-  };
-}
 
 const setup = async function(appConfig: ReactPluginConfigType, router: Router, config: ReactConfigType) : Promise {
   const routes = appConfig.routes.map(_route => {
@@ -152,10 +112,8 @@ const setup = async function(appConfig: ReactPluginConfigType, router: Router, c
       return getHandlerRoute(route, appConfig);
     } else if (route.type === "react") {
       return getReactRoute(route, appConfig);
-    } else if (route.type === "relay") {
-      return getRelayRoute(route, appConfig);
     } else {
-      throw new Error("Unknown type. Route type must be handler, react or relay.");
+      throw new Error("Unknown type. Route type must be handler or react.");
     }
   });
   router.add(routes);
@@ -163,6 +121,7 @@ const setup = async function(appConfig: ReactPluginConfigType, router: Router, c
 
 
 export default {
+  name: "react",
   getDefaults,
   setup
 };
