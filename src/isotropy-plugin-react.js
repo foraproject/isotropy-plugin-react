@@ -3,7 +3,7 @@ import reactAdapter from "isotropy-adapter-react";
 import Router from "isotropy-router";
 
 import type { HttpMethodRouteOptionsType, HttpMethodRouteArgsType } from "isotropy-router";
-import type { IncomingMessage, ServerResponse } from "./flow/http";
+import type { ProcessedIncomingMessage, ServerResponse } from "isotropy-interfaces/node/http";
 
 
 type HandlerRouteType = {
@@ -36,7 +36,7 @@ export type ReactPluginConfigType = {
   toHtml: (html: string, props?: Object) => string,
   elementSelector: string,
   onRender?: Function,
-  onError?: (req: IncomingMessage, res: ServerResponse, e: any) => void
+  onError?: (req: ProcessedIncomingMessage, res: ServerResponse, e: any) => void
 };
 
 export type ReactConfigType = {
@@ -50,7 +50,7 @@ export type getDefaultsParamsType = {
   toHtml?: (html: string, props?: Object) => string,
   elementSelector?: string,
   onRender?: Function,
-  onError?: (req: IncomingMessage, res: ServerResponse, e: any) => void
+  onError?: (req: ProcessedIncomingMessage, res: ServerResponse, e: any) => void
 }
 
 const getDefaults = function(val: getDefaultsParamsType) : ReactPluginConfigType {
@@ -90,7 +90,7 @@ const getReactRoute = function(route: ReactComponentRouteType, appConfig: ReactP
     type: "pattern",
     method: route.method,
     url: route.url,
-    handler: async (req: IncomingMessage, res: ServerResponse, args: Object) => {
+    handler: async (req: ProcessedIncomingMessage, res: ServerResponse, args: Object) => {
       await reactAdapter.render({
           component: route.component,
           req,
