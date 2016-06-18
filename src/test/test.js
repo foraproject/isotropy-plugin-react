@@ -61,7 +61,7 @@ describe("Isotropy React Plugin", () => {
 
     await reactModule.setup(appConfig, router, isotropyConfig);
     const data = await makeRequest("localhost", server.address().port, "/hello", "GET", { 'Content-Type': 'application/x-www-form-urlencoded' }, {});
-    data.result.should.startWith("<html data-reactid");
+    data.result.should.startWith("<html data-reactroot");
   });
 
 
